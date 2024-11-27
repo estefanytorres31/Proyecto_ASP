@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - App_ventas_ds500</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/App_ventas_ds500.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css"/>
+
+    @await RenderSectionAsync("EstiloDT", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color=">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Grupo 1</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item active">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Personal" asp-action="Index">
+                                <i class="fas fa-user"></i> Personal
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">
+                                <i class="fas fa-users"></i> Cliente
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Proyecto" asp-action="Index">
+                                <i class="fas fa-cogs"></i> Proyecto
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    
+
+
+
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - Grupo 1 :v - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

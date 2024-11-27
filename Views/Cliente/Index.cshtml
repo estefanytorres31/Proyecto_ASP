@@ -1,0 +1,275 @@
+﻿@model App_ventas_ds500.Models.Cliente
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section EstiloDT {
+    <link rel="stylesheet" href="~/lib/datatables.net/css/jquery.dataTables.min.css" />
+}
+
+<h1><i class="fas fa-users"></i>Listado del Cliente</h1>
+<hr />
+
+<div class="container">
+    <div class="row mt-3">
+        <table id="tb_cliente" class="table table-striped display" style="width:100%">
+            <thead>
+                <tr>
+                    <td>@Html.DisplayNameFor(per => per.codigo_cliente)</td>
+                    <td>@Html.DisplayNameFor(per => per.tipo_cliente)</td>
+                    <td>@Html.DisplayNameFor(per => per.nombre_cliente)</td>
+                    <td>@Html.DisplayNameFor(per => per.tipo_documento)</td>
+                    <td>@Html.DisplayNameFor(per => per.nro_documento)</td>
+                    <td>@Html.DisplayNameFor(per => per.telefono)</td>
+                    <td>@Html.DisplayNameFor(per => per.email)</td>
+                    <td>@Html.DisplayNameFor(per => per.direccion)</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="modal fade" id="Formulario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form>
+                            <div class="form-group">
+                                <label asp-for="codigo_cliente" class="control-label"></label>
+                                <input asp-for="codigo_cliente" class="form-control" />
+                                <span asp-validation-for="codigo_cliente" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="tipo_cliente" class="control-label"></label>
+                                <input asp-for="tipo_cliente" class="form-control" />
+                                <span asp-validation-for="tipo_cliente" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nombre_cliente" class="control-label"></label>
+                                <input asp-for="nombre_cliente" class="form-control" />
+                                <span asp-validation-for="nombre_cliente" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="tipo_documento" class="control-label"></label>
+                                <input asp-for="tipo_documento" class="form-control" />
+                                <span asp-validation-for="tipo_documento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nro_documento" class="control-label"></label>
+                                <input asp-for="nro_documento" class="form-control" />
+                                <span asp-validation-for="nro_documento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="telefono" class="control-label"></label>
+                                <input asp-for="telefono" class="form-control" />
+                                <span asp-validation-for="telefono" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="email" class="control-label"></label>
+                                <input asp-for="email" class="form-control" />
+                                <span asp-validation-for="email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="direccion" class="control-label"></label>
+                                <input asp-for="direccion" class="form-control" />
+                                <span asp-validation-for="direccion" class="text-danger"></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn_cerrar" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="far fa-window-close"></i>Cerrar
+                </button>
+                <button type="button" id="btn_grabar" class="btn btn-outline-primary"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar este cliente?</p>
+                <p><strong id="clienteEliminar"></strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnEliminar" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/lib/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/lib/datatables.net/js/dataTables.buttons.min.js"></script>
+
+    <script>
+        $(document).ready(
+            function () {
+                $("#tb_cliente").DataTable({
+                    "ajax": {
+                        "url": "@Url.Action("Listar", "Cliente")",
+                        "type": "GET",
+                        "dataType": "json"
+                    },
+                    "columns": [
+                        { "data": "codigo_cliente" },
+                        { "data": "tipo_cliente" },
+                        { "data": "nombre_cliente" },
+                        { "data": "tipo_documento" },
+                        { "data": "nro_documento" },
+                        { "data": "telefono" },
+                        { "data": "email" },
+                        { "data": "direccion" },
+                        {
+                            "data": "codigo_cliente",
+                            "render": function (data) {
+                                return "<button class='btn btn-outline-success' type='button' onclick='AbrirRegistro(\"" + data + "\")'><i class='far fa-edit'></i></button>" +
+                                    "<button class='btn btn-outline-danger' type='button' onclick='Eliminar(\"" + data + "\")'><i class='far fa-trash-alt'></i></button>";
+                            }
+                        }
+                    ],
+                    "order": [[1, "asc"]],
+                    dom: "Bfrtip",
+                    buttons: [
+                        {
+                            text: "Registrar Cliente",
+                            attr: { class: "btn btn-outline-primary" },
+                            action: function () {
+                                AbrirRegistro("")
+                            }
+                        }
+                    ]
+                });
+            }
+        )
+        function AbrirRegistro($codigo_cliente) {
+            if ($codigo_cliente != "") {
+                jQuery.ajax({
+                    url: "@Url.Action("Consultar", "Cliente")" + "?codigo_cliente=" + $codigo_cliente,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data != null) {
+                            $("#codigo_cliente").attr("readonly", true);
+                            $("#codigo_cliente").val(data.codigo_cliente);
+                            $("#tipo_cliente").val(data.tipo_cliente);
+                            $("#nombre_cliente").val(data.nombre_cliente);
+                            $("#tipo_documento").val(data.tipo_documento);
+                            $("#nro_documento").val(data.nro_documento);
+                            $("#telefono").val(data.telefono);
+                            $("#email").val(data.email);
+                            $("#direccion").val(data.direccion);
+                        }
+                    }
+                })
+                $(".modal-title").text("Editar Cliente");
+                $("#btn_grabar").html('<i class="fas fa-save"></i> Guardar cambios');
+            } else {
+                $("#codigo_cliente").attr("readonly", false);
+
+                $("#codigo_cliente").val("");
+                $("#tipo_cliente").val("");
+                $("#nombre_cliente").val("");
+                $("#tipo_documento").val("");
+                $("#nro_documento").val("");
+                $("#telefono").val("");
+                $("#email").val("");
+                $("#direccion").val("");
+
+                $(".modal-title").text("Registrar Cliente");
+                $("#btn_grabar").html('<i class="fas fa-save"></i> Guardar Datos');
+            }
+            $("#Formulario").modal("show");
+        }
+
+        $("#btn_grabar").click(function (e) {
+            let $cliente = {
+                "codigo_cliente": $("#codigo_cliente").val(),
+                "tipo_cliente": $("#tipo_cliente").val(),
+                "nombre_cliente": $("#nombre_cliente").val(),
+                "tipo_documento": $("#tipo_documento").val(),
+                "nro_documento": $("#nro_documento").val(),
+                "telefono": $("#telefono").val(),
+                "email": $("#email").val(),
+                "direccion": $("#direccion").val()
+            };
+
+            jQuery.ajax({
+                url: "@Url.Action("Grabar", "Cliente")",
+                type: "POST",
+                data: JSON.stringify($cliente),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.resultado) {
+                        $("#tb_cliente").DataTable().ajax.reload();
+                        $("#Formulario").modal("hide");
+                    } else {
+                        alert("No fue posible grabar la información");
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        });
+
+        let clienteEliminarId = "";
+
+        function Eliminar($codigo_cliente) {
+            clienteEliminarId = $codigo_cliente; 
+            $.ajax({
+                url: "@Url.Action("Consultar", "Cliente")?codigo_cliente=" + $codigo_cliente,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    if (data) {
+                        $("#clienteEliminar").text(data.nombre_cliente);
+                        $("#modalEliminar").modal("show"); 
+                    }
+                }
+            });
+        }
+        $("#btnEliminar").click(function () {
+            $.ajax({
+                url: "@Url.Action("Borrar", "Cliente")?codigo_cliente=" + clienteEliminarId,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    if (data.resultado) {
+                        $("#tb_cliente").DataTable().ajax.reload(); 
+                        $("#modalEliminar").modal("hide"); 
+                    } else {
+                        alert("No fue posible eliminar el cliente.");
+                    }
+                },
+                error: function (error) {
+                    alert("Ocurrió un error al intentar eliminar el cliente.");
+                }
+            });
+        });
+
+    </script>
+}

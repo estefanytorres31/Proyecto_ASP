@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\App_ventas_ds500.props" />
+</Project>
